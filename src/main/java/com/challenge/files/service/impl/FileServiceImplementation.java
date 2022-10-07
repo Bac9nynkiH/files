@@ -61,8 +61,7 @@ public class FileServiceImplementation implements FileService {
     @Override
     public OneRandomLineResponse getOneRandomLineFromPrevFile(boolean extended) {
         FileInfo fileInfo = fileInfoRepo.findTopByOrderByIdDesc().orElseThrow(() -> new NotFoundException("[getOneRandomLineFromPrevFile] no files were found"));
-        BigInteger row = BigDecimal.valueOf(Math.random() * 100).toBigInteger().multiply(fileInfo.getRowsCount()).divide(BigInteger.valueOf(100));
-
+        BigInteger row = BigDecimal.valueOf(Math.random() * 100).toBigInteger().multiply(fileInfo.getRowsCount().subtract(BigInteger.ONE)).divide(BigInteger.valueOf(100));
         String line = getRowFromFile(fileInfo, row);
 
         if (extended) {
